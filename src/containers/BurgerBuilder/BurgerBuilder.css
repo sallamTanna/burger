@@ -1,0 +1,12 @@
+.show {
+  display: block;
+  background: red;
+  height: 100px;
+  width: 100px;
+  
+}
+
+.hide {
+  display: none;
+  visibility: hidden;
+}
