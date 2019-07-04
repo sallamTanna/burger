@@ -1,21 +1,21 @@
 import React from 'react';
 import classes from './Burger.css'
-import BurgerIngredients from './BurgerIngredients/BurgerIngredients'
+import BurgerIngredients from './BurgerIngredients/BurgerIngredients';
 
 const Burger = (props)=> {
-  let transformedIngredients;
+  let transformedingredients;
 
-  transformedIngredients = Object.keys(props.ingredients).map(ingredient =>
+  transformedingredients = Object.keys(props.ingredients).map(ingredient =>
      [...Array(props.ingredients[ingredient])].map((_, i) => <BurgerIngredients type={ingredient} key={ingredient+i} />))
      .reduce((total, currentValue)=> total=total.concat(currentValue) ,[]);
 
-  if(transformedIngredients.length === 0) {
-    transformedIngredients = <div>Please add some ingredients!</div>
+  if(transformedingredients.length === 0) {
+    transformedingredients = <div>Please add some ingredients!</div>
   }
 
   return <div className={classes.Burger}>
     <BurgerIngredients type="bread-top" />
-    {transformedIngredients}
+    {transformedingredients}
     <BurgerIngredients type="bread-bottom" />
   </div>
 }

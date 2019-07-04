@@ -1,19 +1,24 @@
 import React from 'react';
 import BuildControl from './BuildControl/BuildControl';
+import { connect } from 'react-redux';
 import classes from './BuildControls.css';
 
 const BuildControls = (props) => {
   const labels = [
-    {Label: 'Salad', type:'salad'},
-    {Label: 'Bacon', type:'bacon'},
-    {Label: 'Meat', type:'meat'},
-    {Label: 'Cheese', type:'cheese'},
+    {Label: 'salad', type:'salad'},
+    {Label: 'bacon', type:'bacon'},
+    {Label: 'meat', type:'meat'},
+    {Label: 'cheese', type:'cheese'},
   ]
 
   const orderNowButtonClick = ()=> props.orderNowButtonClick
+  let price = props.price;
+  if(props.purchased) {
+    price=4;
+  }
 
   return <div className={classes.BuildControls}>
-    <p>Current Price: <strong>{props.price}</strong></p>
+    <p>Current Price: <strong>{price}</strong></p>
     {labels.map((label) => <BuildControl disableInfo={props.disableInfo[label.type]}
                                         key={label.type} label={label.Label}
                                         onClickMore={()=>props.onClickMore(label.Label)}
@@ -23,4 +28,12 @@ const BuildControls = (props) => {
   </div>
 }
 
-export default BuildControls;
+const mapStatesToProps = state => {
+  return {
+    price: state.burgerBuilder.price,
+    purchased: state.order.purchased,
+  }
+}
+
+const NewBuildControls = connect(mapStatesToProps)(BuildControls);
+export default NewBuildControls;

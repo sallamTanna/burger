@@ -5,12 +5,12 @@ import classes from './Modal.css';
 
 class Modal extends Component {
 
-  componentWillUpdate() {
-    console.log('Modal componentWillUpdate');
-  }
+  // componentWillUpdate() {
+  //   console.log('Modal componentWillUpdate');
+  // }
 
   shouldComponentUpdate(nextProps, nextState) {
-    if(nextProps.show !== this.props.show ) {
+    if(nextProps.show !== this.props.show || nextProps.children !== this.props.children ) {
       return true
     } else {
       return false
