@@ -1,14 +1,14 @@
-import React, { Component } from 'react';
+import React, { Component, lazy, Suspense } from 'react';
 import Layout from './hoc/Layout/Layout';
-import BurgerBuilder from './containers/BurgerBuilder/BurgerBuilder';
-import CheckoutSummary from './containers/Checkout/Checkout';
-import Orders from './containers/Checkout/Orders/Orders';
-import ContactData from './containers/Checkout/ContactData/ContactData';
-import Logout from './containers/Auth/Logout/Logout'
-import Auth from './containers/Auth/Auth';
 import { Route, Switch, withRouter, Redirect } from 'react-router-dom';
 import { connect } from 'react-redux'
 import { authCheckState } from './store/actions'
+
+const Auth = lazy(() => import('./containers/Auth/Auth'));
+const BurgerBuilder = lazy(() => import('./containers/BurgerBuilder/BurgerBuilder'));
+const CheckoutSummary = lazy(() => import('./containers/Checkout/Checkout'));
+const Orders = lazy(() => import('./containers/Checkout/Orders/Orders'));
+const Logout = lazy(() => import('./containers/Auth/Logout/Logout'));
 
 class App extends Component {
 
@@ -17,25 +17,35 @@ class App extends Component {
   }
 
   render() {
-    let routes = <Switch>
-        <Route path='/auth' exact component={Auth} />
-        <Route path='/' exact component={BurgerBuilder} />
-        <Redirect to='/' /> //For any unknown route
-      </Switch>;
+    let routes =(
+      <Suspense fallback={<div>Loading...</div>}>
+        <Switch>
+          <Route path='/auth' exact component={Auth} />
+          <Route path='/' exact component={BurgerBuilder} />
+          <Redirect to='/' /> //For any unknown route
+        </Switch>
+      </Suspense>
+    );
 
     if(this.props.token) {
-      routes = <Switch>
-        <Route path='/checkout' component={CheckoutSummary} />
-        <Route path='/orders' component={Orders} />
-        <Route path='/logout' exact component={Logout} />
-        <Route path='/' exact component={BurgerBuilder} />
-        <Redirect to='/' />
-      </Switch>
+      routes =(
+        <Suspense fallback={<div>Loading...</div>}>
+          <Switch>
+            <Route path='/checkout' component={CheckoutSummary} />
+            <Route path='/orders' component={Orders} />
+            <Route path='/logout' exact component={Logout} />
+            <Route path='/' exact component={BurgerBuilder} />
+            <Redirect to='/' />
+          </Switch>
+        </Suspense>
+      )
     }
 
-    return <Layout>
-            {routes}
-          </Layout>
+  return (
+    <Layout>
+      {routes}
+    </Layout>
+  );
   }
 }
 
